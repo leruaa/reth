@@ -574,3 +574,6 @@ similar-asserts = "1.5.0"
 tempfile = "3.8"
 test-fuzz = "5"
 tikv-jemallocator = { version = "0.5.0" }
+
+[patch.crates-io]
+alloy-primitives = { path = "../alloy-core/crates/primitives" }

@@ -1,6 +1,8 @@
 pub use alloy_consensus::TxEip1559;
 #[cfg(test)]
 mod tests {
+    use alloy_primitives::Parity;
+
     use super::TxEip1559;
     use crate::{
         transaction::{signature::Signature, TxKind},
@@ -28,13 +30,13 @@ mod tests {
             access_list: AccessList::default(),
         });
 
-        let sig = Signature {
-            r: U256::from_str("0x840cfc572845f5786e702984c2a582528cad4b49b2a10b9db1be7fca90058565")
+        let sig = Signature::new(
+            U256::from_str("0x840cfc572845f5786e702984c2a582528cad4b49b2a10b9db1be7fca90058565")
                 .unwrap(),
-            s: U256::from_str("0x25e7109ceb98168d95b09b18bbf6b685130e0562f233877d492b94eee0c5b6d1")
+            U256::from_str("0x25e7109ceb98168d95b09b18bbf6b685130e0562f233877d492b94eee0c5b6d1")
                 .unwrap(),
-            odd_y_parity: false,
-        };
+            Parity::Parity(false),
+        );
 
         let signed_tx = TransactionSigned::from_transaction_and_signature(tx, sig);
         assert_eq!(signed_tx.hash(), hash, "Expected same hash");
