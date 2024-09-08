@@ -864,7 +864,7 @@ impl Encodable for Transaction {
 /// Signed transaction without its Hash. Used type for inserting into the DB.
 ///
 /// This can by converted to [`TransactionSigned`] by calling [`TransactionSignedNoHash::hash`].
-#[derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, Serialize, Deserialize)]
 #[cfg_attr(any(test, feature = "arbitrary"), derive(arbitrary::Arbitrary))]
 #[cfg_attr(any(test, feature = "reth-codec"), reth_codecs::add_arbitrary_tests(compact))]
 pub struct TransactionSignedNoHash {
@@ -1041,7 +1041,7 @@ impl From<TransactionSigned> for TransactionSignedNoHash {
 
 /// Signed transaction.
 #[cfg_attr(any(test, feature = "reth-codec"), reth_codecs::add_arbitrary_tests(rlp))]
-#[derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, AsRef, Deref, Serialize, Deserialize)]
 pub struct TransactionSigned {
     /// Transaction hash
     pub hash: TxHash,
@@ -1271,7 +1271,7 @@ impl TransactionSigned {
     /// Calculate a heuristic for the in-memory size of the [`TransactionSigned`].
     #[inline]
     pub fn size(&self) -> usize {
-        mem::size_of::<TxHash>() + self.transaction.size() + self.signature.size()
+        mem::size_of::<TxHash>() + self.transaction.size() + mem::size_of::<Signature>()
     }
 
     /// Decodes legacy transaction from the data buffer into a tuple.
@@ -1582,7 +1582,7 @@ impl<'a> arbitrary::Arbitrary<'a> for TransactionSigned {
 }
 
 /// Signed transaction with recovered signer.
-#[derive(Debug, Clone, PartialEq, Hash, Eq, AsRef, Deref, Default)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq, AsRef, Deref)]
 pub struct TransactionSignedEcRecovered {
     /// Signer of the transaction
     signer: Address,
